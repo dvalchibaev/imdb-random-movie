@@ -1,5 +1,6 @@
 import csv
 
+YEARS = [str(y) for y in range(1940, 2024)]
 
 class Movie:
     title: str
@@ -29,45 +30,40 @@ class Movie:
             self.votes = 0
 
 
-GENRES = []
+GENRES = ["None"]
 MOVIES_SNIPPET = []
 
 
 with open("../../imdb/files_tsv/title.basics.tsv", "r") as f:
     columns = f.readline().split()
     movies = {}
-    YEARS = [str(y) for y in range(1980,2024)]
     for line in f.readlines():
         t_id, t_type, title, _, _, year, _, _, genres = line[:-1].split('\t')
-        # if t_type == 'movie' and year in YEARS and "Horror" in genres:
-        #     movies[t_id] = Movie(title, year, genres)
-        if t_type == "movie" and genres != "\\N":
+        if t_type == 'movie' and year in YEARS and genres != "\\N":
+            movies[t_id] = Movie(title, year, genres)
             for genre in genres.split(','):
                 if genre not in GENRES:
                     GENRES.append(genre)
-            if year == "2023":
-                MOVIES_SNIPPET.append([t_id, t_type, title, year, genres])
 
 
-with open("../genres.csv", "w") as f:
+with open("../data/genres.csv", "w") as f:
     rf = csv.writer(f, delimiter=";")
     rf.writerows([[genre] for genre in GENRES])
 
-with open("../data/movies2023.csv", "w") as f:
-    rf = csv.writer(f, delimiter=";")
-    for movie in MOVIES_SNIPPET[:10]:
-        rf.writerow(movie)
+
+with open("../../imdb/files_tsv/title.ratings.tsv", "r") as f:
+    columns = f.readline().split()
+    for line in f.readlines():
+        t_id, rating, votes = line[:-1].split('\t')
+        if t_id in movies.keys():
+            movies[t_id].add_rating(rating)
+            movies[t_id].add_votes(votes)
 
 
-# with open("../../imdb/files_tsv/title.ratings.tsv", "r") as f:
-#     columns = f.readline().split()
-#     for line in f.readlines():
-#         t_id, rating, votes = line[:-1].split('\t')
-#         if t_id in movies.keys():
-#             movies[t_id].add_rating(rating)
-#             movies[t_id].add_votes(votes)
-
-
-for k, v in movies.items():
-    if v.rating > 8 and v.votes > 5000:
-        print(k, v)
+for year in YEARS:
+    with open(f"../data/movies{year}.csv", "w") as f:
+        rf = csv.writer(f, delimiter=";")
+        for k, v in movies.items():
+            if v.rating > 0 and v.votes > 0 and v.year == int(year):
+                movie = [k, v.title, v.year, v.rating, v.votes, ','.join(v.genres)]
+                rf.writerow(movie)

@@ -27,8 +27,8 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/fill_db/")
-async def fill_db(db: Session = Depends(get_db)):
+@app.get("/fill_genres/")
+async def fill_genres(db: Session = Depends(get_db)):
     with open("src/genres.csv", "r") as f:
         for line in f.readlines():
             db_genre = model.Genre(name=line[:-1])
@@ -45,16 +45,18 @@ async def get_genres(db: Session = Depends(get_db)):
 
 @app.get("/fill_movies/")
 async def fill_movies(db: Session = Depends(get_db)):
-    with open("src/data/movies2023.csv", "r") as f:
+    with open("src/data/movies.csv", "r") as f:
         fr = csv.reader(f, delimiter=";")
         for line in fr:
-            id, _, title, year, genres = line
+            id, title, year, rating, votes, genres = line
             id = int(id[2:])
-            movie = model.Movie(id=id, title=title, year=int(year), rating=0, votes=0)
-            for genre in genres.split(','):
+            genres = genres.split(",")
+            movie = model.Movie(id=id, title=title, year=int(year),
+                                rating=float(rating), votes=int(votes))
+            for genre in genres:
                 print(genre)
                 db_genre = db.query(model.Genre).filter(model.Genre.name==genre).first()
-                print(db_genre)
+                print(db_genre, db_genre.name)
                 movie.genres.append(db_genre)
             db.add(movie)
     db.commit()

@@ -5,3 +5,5 @@ imdb/
 .idea
 
 .env
+
+src/data/

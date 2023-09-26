@@ -25,4 +25,4 @@ def main(gz_dir: str, tsv_dir):
 
 
 if __name__ == "__main__":
-    main('../../imdb/files/', '../imdb/files_tsv/')
+    main('../../imdb/files/', '../../imdb/files_tsv/')
