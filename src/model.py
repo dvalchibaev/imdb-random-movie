@@ -27,7 +27,7 @@ class Genre(Base):
 class Movie(Base):
     __tablename__ = "movies"
     id = Column(String, primary_key=True)
-    title = Column(String(200))
+    title = Column(String(500))
     year = Column(Integer)
     rating = Column(Float)
     votes = Column(Integer)
