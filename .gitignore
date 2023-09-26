@@ -1,0 +1,7 @@
+imdb/
+*.gz
+*.tsv
+
+.idea
+
+.env
