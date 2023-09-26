@@ -1,11 +1,14 @@
 # ToDo list
 
+- [x] MVP
+
+
 - [ ] Refactor functions to modules
   - [ ] update *.gz from IMDB (scraper)
   - [ ] extract *.gz to *.tsv (parser)
-  - [ ] import data to DB
+  - [x] import data to DB
 
-- [ ] Setup a DB (postgresql)
+- [x] Setup a DB (postgresql)
   - [ ] models.py
     - [x] movies
     - [ ] watched movies
