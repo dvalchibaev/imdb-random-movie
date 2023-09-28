@@ -2,6 +2,7 @@ import csv
 
 YEARS = [str(y) for y in range(1940, 2024)]
 
+
 class Movie:
     title: str
     year: int

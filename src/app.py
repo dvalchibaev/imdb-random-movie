@@ -4,7 +4,7 @@ import fastapi.templating
 
 from sqlalchemy.orm import Session, aliased
 
-from . import model, schemas
+from . import model
 from .database import SessionLocal, engine
 
 import csv
@@ -57,7 +57,7 @@ async def home(request: Request, db: Session = Depends(get_db)):
                                                  model.Movie.votes > 2500,
                                                  model.Movie.genres.contains(genre)).all()
     movie = choice(random_movies)
-    return templates.TemplateResponse("movie.html", {"request": request, "movie":movie})
+    return templates.TemplateResponse("movie.html", {"request": request, "movie": movie})
 
 
 @app.get("/fill_genres/")
