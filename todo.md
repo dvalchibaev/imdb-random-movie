@@ -24,7 +24,7 @@
 
 ## .env
 - [x] Setup an .env
-- [ ] .env file example
+- [x] .env file example
 
 ## app
 - [ ] Create FstAPI app
