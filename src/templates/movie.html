@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Random horror movie {% endblock %}
+
+{% block header %} Random horror movie {% endblock %}
+
+{% block movie_title %} {{movie.title}} {% endblock %}
+
+{% block movie_info %}
+<ul class="list-unstyled">
+    <li>Year: {{movie.year}}</li>
+    <li>Rating: {{movie.rating}}</li>
+    <li>Votes: {{movie.votes}}</li>
+</ul>
+{% endblock %}
+
+{% block name %} {% endblock %}
