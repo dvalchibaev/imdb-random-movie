@@ -1,13 +1,19 @@
 import uvicorn
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
+import fastapi.templating
+
+from sqlalchemy.orm import Session, aliased
+
 from . import model, schemas
 from .database import SessionLocal, engine
-from sqlalchemy.orm import Session, aliased
 
 import csv
 from random import choice
 
 model.Base.metadata.create_all(bind=engine)
+
+
+templates = fastapi.templating.Jinja2Templates(directory="src/templates")
 
 app = FastAPI()
 
@@ -37,6 +43,21 @@ async def root(db: Session = Depends(get_db)):
         "rating": f"{movie.rating}",
         "votes": f"{movie.votes}"
     }
+
+
+@app.get("/home/")
+async def home(request: Request):
+    return templates.TemplateResponse("base.html", {"request": request})
+
+
+@app.get("/movie/")
+async def home(request: Request, db: Session = Depends(get_db)):
+    genre = db.query(model.Genre).filter(model.Genre.name == "Horror").first()
+    random_movies = db.query(model.Movie).filter(model.Movie.rating > 6.5,
+                                                 model.Movie.votes > 2500,
+                                                 model.Movie.genres.contains(genre)).all()
+    movie = choice(random_movies)
+    return templates.TemplateResponse("movie.html", {"request": request, "movie":movie})
 
 
 @app.get("/fill_genres/")
