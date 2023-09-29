@@ -7,3 +7,5 @@ imdb/
 .env
 
 src/data/
+
+__pycache__
