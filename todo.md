@@ -26,6 +26,7 @@
 - [x] Setup an .env
 - [x] .env file example
 
+
 ## app
 - [ ] Create FstAPI app
   - [ ] Views
